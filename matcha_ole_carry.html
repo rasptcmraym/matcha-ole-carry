@@ -194,8 +194,8 @@ const loadImage = (src) => new Promise((ok, ng) => {
   img.onerror = ng;
   img.src = src;
 });
-const [floorImg, wallImg, carrierImg, ...monsterImgs] = await Promise.all([
-  'tex/maptile_sogen_02.png', 'tex/maptile_renga_brown_02_matt.png', 'tex/carrier.png',
+const [floorImg, wallImg, ...monsterImgs] = await Promise.all([
+  'tex/maptile_sogen_02.png', 'tex/maptile_renga_brown_02_matt.png',
   'tex/character_monster_frankenstein_01_green.png', 'tex/character_monster_ghost_white.png',
   'tex/character_jujin_okami_man_gray.png', 'tex/character_shitsuji_silver.png',
 ].map(loadImage));
@@ -307,11 +307,6 @@ const courseGroup = new THREE.Group();
 scene.add(courseGroup);
 const windGroup = new THREE.Group();          // 横風のエフェクト（見た目だけ）
 scene.add(windGroup);
-// 運び手のキャラクター（2D）。お盆の後ろに立ち、お盆と一緒に動く（render で位置を合わせる）
-const carrier = new THREE.Sprite(new THREE.SpriteMaterial({ map: makeTexture(carrierImg), transparent: true }));
-carrier.center.set(0.5, 0);
-carrier.scale.set(1.6, 1.6, 1);
-scene.add(carrier);
 const streaks = [];
 for (let i = 0; i < 12; i++) {
   const s = new THREE.Mesh(new THREE.BoxGeometry(0.04, 0.04, 1.2),
@@ -615,7 +610,6 @@ function render(now) {
   // カメラはお盆に追従して寄って映す（前方が見えるようお盆より少し先を中心にする）
   camera.position.set(tray.position.x * 0.5, 22, tray.position.z + 14);   // 真上寄り：寝かせた板が潰れて見えないように
   camera.lookAt(tray.position.x * 0.5, 0, tray.position.z - 7);
-  carrier.position.set(tray.position.x, TRAY.y - TRAY.h / 2, tray.position.z + 2.4);
   updateGauge(dt);
   updateWind(dt);
   updateHud();
